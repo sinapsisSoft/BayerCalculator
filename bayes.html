@@ -134,6 +134,7 @@
     var a=0;
     var ba=0;
     var c=0;
+    
     for(var i=0;i<lengDataProbability;i++)
     {
       
@@ -163,14 +164,17 @@
             debugger;
           }
       }
+      contJ++;
       probability=c/summation;
       console.log(summation);
       valorResul[i]=probability;
+      debugger;
       summation=0;
       probability=0;
       a=0;
       b=0;
       c=0;
+      
     }
     
     //console.log(valorResul);
