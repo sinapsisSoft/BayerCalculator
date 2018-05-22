@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript">
+  
     function constructCause(){
         var selectCause=document.getElementById('selCausas');
         var count=parseInt(selectCause.options[selectCause.selectedIndex].text);
@@ -25,15 +26,15 @@
             componentsHTML.push("<div class='row col-12 componets'>");
             componentsHTML.push(div);
             componentsHTML.push("<label for='"+title+"'>Causa A"+i+": </label>");
-            componentsHTML.push("<input type='text' class='form-control' id='"+title+"'>");
+            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"'>");
             componentsHTML.push("</div>");
             componentsHTML.push(divSub);
             componentsHTML.push("<label for='"+title+"B1'>Efecto B1: </label>");
-            componentsHTML.push("<input type='text' class='form-control' id='"+title+"B1'>");
+            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B1'>");
             componentsHTML.push("</div>");
             componentsHTML.push(divSub);
             componentsHTML.push("<label for='"+title+"B2'>Efecto B2: </label>");
-            componentsHTML.push("<input type='text' class='form-control' id='"+title+"B2'>");
+            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B2'>");
             componentsHTML.push("</div>");
             componentsHTML.push("</div>");
 
@@ -55,49 +56,53 @@
       var sumValidate=0;
       var sumValidateSub=0;
       var contEvent=0;
+      var dataCause=[];
+      var contSection=0;
+      var cont=0;
       for(var i=0;i<lengthForm;i++){
+        
+        cont++;
         var elementsForm=fomrData.elements[i];
         var textValue=elementsForm.value.trim();
+        if(cont==3){
+          cont=0;
+          contSection++; 
+        }
+        
         if(elementsForm.type == "text")
         {
           if (textValue == "" || textValue.length == 0 || /^\s+|\s+$/.test(textValue)) {
             elementsForm.focus();
             return false;
           }else{
-
+            
             var textId=elementsForm.id;
             
+            dataCause.push(textValue);
             if(textId.length==2)
             {
-              sumValidate+=parseFloat(textValue);
-              //sumValidate=sumValidate.toFixed(2);
-                
+                 sumValidate+=parseFloat(textValue);
+
             }else{
-              
-              if(contEvent==2){
-                contEvent=0;
-                sumValidateSub=0;
-              }
               sumValidateSub+=parseFloat(textValue);
-              
-              if(contEvent<2){
-                alert("Result"+sumValidateSub);
-          
-              }else{
-                alert("Result"+sumValidateSub);
-                if(sumValidateSub==1){
-                  
-                  elementsForm.classList.remove("is-invalid"); 
-                 }else{
-                   alert("La suma de las probabilidades de los efectos debe dar 1, verifique los datos suministrados.");
-                   elementsForm.value="";
-                   elementsForm.classList.add("is-invalid");
-                  return false; 
-                 }
-
-              }
+            
               contEvent++;
-
+            
+              if(contEvent==2){
+               
+                if(sumValidateSub!=1)
+                  {
+                    alert("La suma de las probabilidades de los efectos debe dar 1, verifique los datos suministrados.");
+                    elementsForm.value="";
+                    elementsForm.classList.add("is-invalid");
+                   return false; 
+                  }else{
+                    contEvent=0;
+                    sumValidateSub=0;
+                    elementsForm.classList.remove("is-invalid"); 
+                  }
+              }
+              //alert("Suma"+sumValidateSub);
             }
           }
         
@@ -105,12 +110,72 @@
       
       
     }
+    
+    
     if(sumValidate!=1)
     {
       alert("La suma de las probabilidades de las causas debe dar 1, verifique los datos suministrados.");
-      //clearForm(fomrData,0);
+      clearForm(fomrData,0);
+    }
+    else{
+      elementsForm.classList.remove("is-invalid");
+      bayer(dataCause); 
+    }
+  }
+  function bayer(data){
+    
+    var lengData=data.length;
+    var lengDataProbability=lengData/3;
+    var cont=0;
+    var contJ=0;
+    var valorResul=[];
+    var probability=0;
+    var summation=0;
+    var a=0;
+    var ba=0;
+    var c=0;
+    for(var i=0;i<lengDataProbability;i++)
+    {
+      
+      for(var j=0;j<lengData;j++){
+        cont++;
+        if(cont==3){
+          cont=0;
+          debugger;
+        }
+        else{
+          if(cont==1){
+            a=data[j];
+            debugger;
+          }
+          else{
+            ba=data[j];
+            summation+=a*ba;
+            console.log("Multiplica"+a*ba);
+            debugger;
+          }
+          
+          
+         
+        }
+        if(j==2){
+            c=a*ba;
+            debugger;
+          }
+      }
+      probability=c/summation;
+      console.log(summation);
+      valorResul[i]=probability;
+      summation=0;
+      probability=0;
+      a=0;
+      b=0;
+      c=0;
     }
     
+    //console.log(valorResul);
+    
+
   }
   function clearForm(fomr,type){
 
@@ -126,9 +191,8 @@
             {
               elementsForm.value="";
               elementsForm.classList.add("is-invalid"); 
-              
-
             }
+            
           
         
         }
