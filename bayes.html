@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Calculadora - Teorema de Bayes</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    function constructCause(){
+        var selectCause=document.getElementById('selCausas');
+        var count=parseInt(selectCause.options[selectCause.selectedIndex].text);
+        var div="<div style='margin-top:5px;' class='form-group col-xs-12 col-sm-12 col-md-4 col-lg-12 col-xl-12'>";
+        var divSub="<div  style='margin-top:5px;'class='form-group col-xs-6 col-sm-6 col-md-4 col-lg-6 col-xl-6'>";
+        var textContainer="";
+        var content=document.getElementById('newComponents');
+        var componentsHTML=[];
+        content.innerHTML=textContainer;
+        componentsHTML.push("<form id='formData'><div class='form-inline'>");
+        for(var i=0;i<count;i++){
+            
+            var title="A"+i;
+   
+            componentsHTML.push("<div class='row col-12 componets'>");
+            componentsHTML.push(div);
+            componentsHTML.push("<label for='"+title+"'>Causa A"+i+": </label>");
+            componentsHTML.push("<input type='text' class='form-control' id='"+title+"'>");
+            componentsHTML.push("</div>");
+            componentsHTML.push(divSub);
+            componentsHTML.push("<label for='"+title+"B1'>Efecto B1: </label>");
+            componentsHTML.push("<input type='text' class='form-control' id='"+title+"B1'>");
+            componentsHTML.push("</div>");
+            componentsHTML.push(divSub);
+            componentsHTML.push("<label for='"+title+"B2'>Efecto B2: </label>");
+            componentsHTML.push("<input type='text' class='form-control' id='"+title+"B2'>");
+            componentsHTML.push("</div>");
+            componentsHTML.push("</div>");
+
+        }
+        componentsHTML.push("<button type='button'class='btn btn-danger btn_send' onclick='calculate()' >Calcular</button>");
+        componentsHTML.push("</form></div>");
+    
+      for(var j=0;j<componentsHTML.length;j++){  
+        textContainer+=componentsHTML[j];
+      }
+      content.innerHTML=textContainer;
+        
+    }
+    function calculate(){
+
+      var fomrData=document.getElementById('formData');
+      var lengthForm=fomrData.length;
+      var dataId=[];
+      var sumValidate=0;
+      var sumValidateSub=0;
+      var contEvent=0;
+      for(var i=0;i<lengthForm;i++){
+        var elementsForm=fomrData.elements[i];
+        var textValue=elementsForm.value.trim();
+        if(elementsForm.type == "text")
+        {
+          if (textValue == "" || textValue.length == 0 || /^\s+|\s+$/.test(textValue)) {
+            elementsForm.focus();
+            return false;
+          }else{
+
+            var textId=elementsForm.id;
+            
+            if(textId.length==2)
+            {
+              sumValidate+=parseFloat(textValue);
+              //sumValidate=sumValidate.toFixed(2);
+                
+            }else{
+              
+              if(contEvent==2){
+                contEvent=0;
+                sumValidateSub=0;
+              }
+              sumValidateSub+=parseFloat(textValue);
+              
+              if(contEvent<2){
+                alert("Result"+sumValidateSub);
+          
+              }else{
+                alert("Result"+sumValidateSub);
+                if(sumValidateSub==1){
+                  
+                  elementsForm.classList.remove("is-invalid"); 
+                 }else{
+                   alert("La suma de las probabilidades de los efectos debe dar 1, verifique los datos suministrados.");
+                   elementsForm.value="";
+                   elementsForm.classList.add("is-invalid");
+                  return false; 
+                 }
+
+              }
+              contEvent++;
+
+            }
+          }
+        
+        }
+      
+      
+    }
+    if(sumValidate!=1)
+    {
+      alert("La suma de las probabilidades de las causas debe dar 1, verifique los datos suministrados.");
+      //clearForm(fomrData,0);
+    }
+    
+  }
+  function clearForm(fomr,type){
+
+      var lengthForm=fomr.length;
+      for(var i=0;i<lengthForm;i++){
+        var elementsForm=fomr.elements[i];
+        var textValue=elementsForm.value.trim();
+        if(elementsForm.type == "text")
+        {
+          var textId=elementsForm.id;
+          
+            if(textId.length==2)
+            {
+              elementsForm.value="";
+              elementsForm.classList.add("is-invalid"); 
+              
+
+            }
+          
+        
+        }
+      
+      
+    }
+    
+  }
+  </script>
+  <style type="text/css">
+    .componets{
+      border-top: 1px solid red;
+
+      margin-top:5px;
+
+    }
+    .btn_send{
+      margin: 10px;
+      width: 100%;
+
+    }
+    .is-invalid{
+
+      border-color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Calculadora - Teorema de Bayes</h1>
+  <p>El teorema de Bayes, en la teoría de la probabilidad, es una proposición planteada por el filósofo inglés <b><a title="Thomas Bayes" href="https://es.wikipedia.org/wiki/Thomas_Bayes" target="_black">Thomas Bayes (1702-1761)</a></b>​ en 1763, que expresa la probabilidad condicional de un evento aleatorio A dado B en términos de la distribución de probabilidad condicional del evento B dado A y la distribución de probabilidad marginal de sólo A.</p> 
+</div>
+
+  
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+      <h3>Teoría</h3>
+      <p>Sea <b>{A<sub>1</sub>,A<sub>2</sub>,...A<sub>n</sub>}</b> un conjunto de sucesos mutuamente excluyentes y exhaustivos, y tales que la probabilidad de cada uno de ellos es distinta de cero (0). Sea B un suceso cualquiera del que se conocen las probabilidades condicionales <b>P(B|A<sub>i</sub>)</b>. Entonces, la probabilidad <b>P(A<sub>i</sub>|B) </b>viene dada por la expresión:</p>
+
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+     <h3>Asignar árbol de probabilidad</h3>
+     <div class="form-inline" >
+        <div class="form-group ">
+                <label  for="sel1"># Causas:</label>
+                <select class="form-control " id="selCausas">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+        </div>
+        
+        <button title="Cargar" onclick="constructCause()" class="btn btn-primary">Cargar</button>
+    </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-4 col-xl-4">
+      
+      <h3>Asignar valores</h3>
+      <div id="newComponents" class="col-12"></div>        
+      
+      
+  </div>
+</div>
+
+</body>
+</html>
