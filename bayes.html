@@ -124,7 +124,7 @@
   }
   function bayer(data){
     
-    var lengData=data.length;
+   /* var lengData=data.length;
     var lengDataProbability=lengData/3;
     var cont=0;
     var contJ=0;
@@ -177,9 +177,62 @@
       
     }
     
-    //console.log(valorResul);
-    
+    //console.log(valorResul);*/
 
+    var lengData=data.length;
+    var lengDataProbability=lengData/3;
+    var MatrixData = new Array(lengDataProbability);
+    var cont=0;
+    console.log(data);
+    console.log(lengData);
+    console.log(lengDataProbability);
+    console.log(MatrixData);
+    var start=0;
+    var end=3;
+    for(var i=0;i<lengDataProbability;i++){
+      var myArray=[];
+         for(start;start<end;start++){
+          myArray.push(data[start]);
+         
+        }
+        
+        MatrixData[i]=myArray;
+        var a=MatrixData[i][0];
+        var b=MatrixData[i][1];
+        var c=MatrixData[i][2];
+        MatrixData[i][3]=a*b;
+        MatrixData[i][4]=a*c;
+        start=end;
+        end+=3;
+    
+    console.log(MatrixData);
+  }
+    var lengMatrix=MatrixData.length;
+       var resultP=0;
+       var resultN=0;
+       var a=0;
+       var ba=0;
+       var c=0;
+       var bc=0;
+     for(var i=0;i<lengMatrix;i++){
+        resultP=0;
+        resultN=0;
+        a=0;
+        ba=0;
+        c=0;
+        bc=0;
+       a=MatrixData[i][3];
+       c=MatrixData[i][4];
+       for(var j=0;j<lengMatrix;j++){
+          ba+=MatrixData[j][3];
+          bc+=MatrixData[j][4];
+       }
+       resultP=a/ba;
+       MatrixData[i][5]=resultP;
+       resultN=c/bc;
+       MatrixData[i][6]=resultN;
+     }
+     console.log(MatrixData);
   }
   function clearForm(fomr,type){
 
