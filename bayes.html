@@ -1,284 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Calculadora - Teorema de Bayes</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="../img/icons/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../img/icons/favicon-16x16.png" sizes="16x16" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript">
   
-    function constructCause(){
-        var selectCause=document.getElementById('selCausas');
-        var count=parseInt(selectCause.options[selectCause.selectedIndex].text);
-        var div="<div style='margin-top:5px;' class='form-group col-xs-12 col-sm-12 col-md-4 col-lg-12 col-xl-12'>";
-        var divSub="<div  style='margin-top:5px;'class='form-group col-xs-6 col-sm-6 col-md-4 col-lg-6 col-xl-6'>";
-        var textContainer="";
-        var content=document.getElementById('newComponents');
-        var componentsHTML=[];
-        content.innerHTML=textContainer;
-        componentsHTML.push("<form id='formData'><div class='form-inline'>");
-        for(var i=0;i<count;i++){
-            
-            var title="A"+i;
-   
-            componentsHTML.push("<div class='row col-12 componets'>");
-            componentsHTML.push(div);
-            componentsHTML.push("<label for='"+title+"'>Causa A"+i+": </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"'>");
-            componentsHTML.push("</div>");
-            componentsHTML.push(divSub);
-            componentsHTML.push("<label for='"+title+"B1'>Efecto B1: </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B1'>");
-            componentsHTML.push("</div>");
-            componentsHTML.push(divSub);
-            componentsHTML.push("<label for='"+title+"B2'>Efecto B2: </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B2'>");
-            componentsHTML.push("</div>");
-            componentsHTML.push("</div>");
-
-        }
-        componentsHTML.push("<button type='button'class='btn btn-danger btn_send' onclick='calculate()' >Calcular</button>");
-        componentsHTML.push("</form></div>");
-    
-      for(var j=0;j<componentsHTML.length;j++){  
-        textContainer+=componentsHTML[j];
-      }
-      content.innerHTML=textContainer;
-        
-    }
-    function calculate(){
-
-      var fomrData=document.getElementById('formData');
-      var lengthForm=fomrData.length;
-      var dataId=[];
-      var sumValidate=0;
-      var sumValidateSub=0;
-      var contEvent=0;
-      var dataCause=[];
-      var contSection=0;
-      var cont=0;
-      for(var i=0;i<lengthForm;i++){
-        
-        cont++;
-        var elementsForm=fomrData.elements[i];
-        var textValue=elementsForm.value.trim();
-        if(cont==3){
-          cont=0;
-          contSection++; 
-        }
-        
-        if(elementsForm.type == "text")
-        {
-          if (textValue == "" || textValue.length == 0 || /^\s+|\s+$/.test(textValue)) {
-            elementsForm.focus();
-            return false;
-          }else{
-            
-            var textId=elementsForm.id;
-            
-            dataCause.push(textValue);
-            if(textId.length==2)
-            {
-                 sumValidate+=parseFloat(textValue);
-
-            }else{
-              sumValidateSub+=parseFloat(textValue);
-            
-              contEvent++;
-            
-              if(contEvent==2){
-               
-                if(sumValidateSub!=1)
-                  {
-                    alert("La suma de las probabilidades de los efectos debe dar 1, verifique los datos suministrados.");
-                    elementsForm.value="";
-                    elementsForm.classList.add("is-invalid");
-                   return false; 
-                  }else{
-                    contEvent=0;
-                    sumValidateSub=0;
-                    elementsForm.classList.remove("is-invalid"); 
-                  }
-              }
-              //alert("Suma"+sumValidateSub);
-            }
-          }
-        
-        }
-      
-      
-    }
-    
-    
-    if(sumValidate!=1)
-    {
-      alert("La suma de las probabilidades de las causas debe dar 1, verifique los datos suministrados.");
-      clearForm(fomrData,0);
-    }
-    else{
-      elementsForm.classList.remove("is-invalid");
-      bayer(dataCause); 
-    }
-  }
-  function bayer(data){
-    var table="<table class='table'><thead><tr><th>CAUSA (A)</th><th>EFECTO (B1|A)</th><th>EFECTO (B2|A)</th></tr></thead><tbody><tr>";
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-          </tr>
-          <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>mary@example.com</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>july@example.com</td>
-          </tr>
-        </tbody>
-      </table>
-    var lengData=data.length;
-    var lengDataProbability=lengData/3;
-    var MatrixData = new Array(lengDataProbability);
-    var cont=0;
-  
-    var start=0;
-    var end=3;
-    for(var i=0;i<lengDataProbability;i++){
-      var myArray=[];
-         for(start;start<end;start++){
-          myArray.push(data[start]);
-         
-        }
-        
-        MatrixData[i]=myArray;
-        var a=MatrixData[i][0];
-        var b=MatrixData[i][1];
-        var c=MatrixData[i][2];
-        MatrixData[i][3]=a*b;
-        MatrixData[i][4]=a*c;
-        start=end;
-        end+=3;
-    
-    
-  }
-    var lengMatrix=MatrixData.length;
-       var resultP=0;
-       var resultN=0;
-       var a=0;
-       var ba=0;
-       var c=0;
-       var bc=0;
-     for(var i=0;i<lengMatrix;i++){
-        resultP=0;
-        resultN=0;
-        a=0;
-        ba=0;
-        c=0;
-        bc=0;
-       a=MatrixData[i][3];
-       c=MatrixData[i][4];
-       for(var j=0;j<lengMatrix;j++){
-          ba+=MatrixData[j][3];
-          bc+=MatrixData[j][4];
-       }
-       resultP=a/ba;
-       MatrixData[i][5]=resultP;
-       resultN=c/bc;
-       MatrixData[i][6]=resultN;
-     }
-     console.log(MatrixData);
-  }
-  function clearForm(fomr,type){
-
-      var lengthForm=fomr.length;
-      for(var i=0;i<lengthForm;i++){
-        var elementsForm=fomr.elements[i];
-        var textValue=elementsForm.value.trim();
-        if(elementsForm.type == "text")
-        {
-          var textId=elementsForm.id;
-          
-            if(textId.length==2)
-            {
-              elementsForm.value="";
-              elementsForm.classList.add("is-invalid"); 
-            }
-            
-          
-        
-        }
-      
-      
-    }
-    
-  }
-  </script>
+  <script src="js/function.js" type="text/javascript"></script>
   <style type="text/css">
-    .componets{
+    .componets {
       border-top: 1px solid red;
-
-      margin-top:5px;
-
+      margin-top: 5px;
     }
-    .btn_send{
+
+    .btn_send {
       margin: 10px;
       width: 100%;
-
     }
-    .is-invalid{
 
+    .is-invalid {
       border-color: red;
+    }
+
+    .cellcondition {
+      text-align: center;
+      font-size: 20px;
+      line-height: 3 !important;
+      color: navy;
+    }
+
+    .cellresult {
+      font-size: 15px;
+      color: red;
+    }
+
+    th {
+      text-align: center;
+      color: blue;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    td {
+      text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
+
 <body>
-
-<div class="jumbotron text-center">
-  <h1>Calculadora - Teorema de Bayes</h1>
-  <p>El teorema de Bayes, en la teoría de la probabilidad, es una proposición planteada por el filósofo inglés <b><a title="Thomas Bayes" href="https://es.wikipedia.org/wiki/Thomas_Bayes" target="_black">Thomas Bayes (1702-1761)</a></b>​ en 1763, que expresa la probabilidad condicional de un evento aleatorio A dado B en términos de la distribución de probabilidad condicional del evento B dado A y la distribución de probabilidad marginal de sólo A.</p> 
-</div>
-
-  
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-      <h3>Teoría</h3>
-      <p>Sea <b>{A<sub>1</sub>,A<sub>2</sub>,...A<sub>n</sub>}</b> un conjunto de sucesos mutuamente excluyentes y exhaustivos, y tales que la probabilidad de cada uno de ellos es distinta de cero (0). Sea B un suceso cualquiera del que se conocen las probabilidades condicionales <b>P(B|A<sub>i</sub>)</b>. Entonces, la probabilidad <b>P(A<sub>i</sub>|B) </b>viene dada por la expresión:</p>
-
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-     <h3>Asignar árbol de probabilidad</h3>
-     <div class="form-inline" >
-        <div class="form-group ">
-                <label  for="sel1"># Causas:</label>
-                <select class="form-control " id="selCausas">
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+  <div class="jumbotron text-center">
+    <h1>Calculadora - Teorema de Bayes</h1>
+    <p style="margin:15px">El teorema de Bayes, en la teoría de la probabilidad, es una proposición planteada por el filósofo inglés
+      <b>
+        <a title="Thomas Bayes" href="https://es.wikipedia.org/wiki/Thomas_Bayes" target="_black">Thomas Bayes (1702-1761)</a>
+      </b>​ en 1763, que expresa la probabilidad condicional de un evento aleatorio A dado B en términos de la distribución de
+      probabilidad condicional del evento B dado A y la distribución de probabilidad marginal de sólo A.</p>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h3>Teoría</h3>
+        <p class="text-justify">Sea
+          <b>{A
+            <sub>1</sub>,A
+            <sub>2</sub>,...A
+            <sub>n</sub>}</b> un conjunto de sucesos mutuamente excluyentes y exhaustivos, y tales que la probabilidad de cada
+          uno de ellos es distinta de cero (0). Sea B un suceso cualquiera del que se conocen las probabilidades condicionales
+          <b>P(B|A
+            <sub>i</sub>)</b>. Entonces, la probabilidad
+          <b>P(A
+            <sub>i</sub>|B) </b>viene dada por la expresión:</p>
+        <img src="img/imgBayes.png" style="margin: auto" class="img-rounded img-responsive" title="Función Teoremma de Bayes" alt="Teorema de Bayes">
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" style="text-align: center">
+          <a name="0"></a>
+        <h3 >Asignar árbol de probabilidad</h3>
+        <div class="form-inline">
+          <div class="form-group ">
+            <label for="sel1"># Causas:</label>
+            <select class="form-control " id="selCausas">
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+          <button title="Cargar" onclick="constructCause()" class="btn btn-primary">Cargar</button>
         </div>
-        
-        <button title="Cargar" onclick="constructCause()" class="btn btn-primary">Cargar</button>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" style="text-align: center">
+          <a name="1"></a>
+        <h3>Asignar valores</h3>
+        <div id="newComponents" class="col-12"></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="table-responsive" id="tableResult">
+        </div>
+      </div>
     </div>
-    </div>
-
-    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-4 col-xl-4">
-      
-      <h3>Asignar valores</h3>
-      <div id="newComponents" class="col-12"></div>        
-      
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="table-responsive" id="tableResult">
-      
-    </div>
-    </div>
-</div>
-
 </body>
 </html>
