@@ -183,10 +183,7 @@
     var lengDataProbability=lengData/3;
     var MatrixData = new Array(lengDataProbability);
     var cont=0;
-    console.log(data);
-    console.log(lengData);
-    console.log(lengDataProbability);
-    console.log(MatrixData);
+  
     var start=0;
     var end=3;
     for(var i=0;i<lengDataProbability;i++){
@@ -205,7 +202,7 @@
         start=end;
         end+=3;
     
-    console.log(MatrixData);
+    
   }
     var lengMatrix=MatrixData.length;
        var resultP=0;
@@ -298,7 +295,6 @@
         <div class="form-group ">
                 <label  for="sel1"># Causas:</label>
                 <select class="form-control " id="selCausas">
-                    <option>1</option>
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
@@ -315,8 +311,12 @@
       <h3>Asignar valores</h3>
       <div id="newComponents" class="col-12"></div>        
       
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="table-responsive" id="tableResult">
       
-  </div>
+    </div>
+    </div>
 </div>
 
 </body>
