@@ -26,15 +26,15 @@
             componentsHTML.push("<div class='row col-12 componets'>");
             componentsHTML.push(div);
             componentsHTML.push("<label for='"+title+"'>Causa A"+i+": </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"'>");
+            componentsHTML.push("<input type='text' onkeypress='return isNumberKey(event)' class='form-control text-center numeric' id='"+title+"'>");
             componentsHTML.push("</div>");
             componentsHTML.push(divSub);
             componentsHTML.push("<label for='"+title+"B1'>Efecto B1: </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B1'>");
+            componentsHTML.push("<input type='text' onkeypress='return isNumberKey(event)'class='form-control text-center numeric' id='"+title+"B1'>");
             componentsHTML.push("</div>");
             componentsHTML.push(divSub);
             componentsHTML.push("<label for='"+title+"B2'>Efecto B2: </label>");
-            componentsHTML.push("<input type='text' class='form-control text-center numeric' id='"+title+"B2'>");
+            componentsHTML.push("<input type='text'onkeypress='return isNumberKey(event)' class='form-control text-center numeric' id='"+title+"B2'>");
             componentsHTML.push("</div>");
             componentsHTML.push("</div>");
 
@@ -122,24 +122,9 @@
       bayer(dataCause); 
     }
   }
-  function bayer(data){
-    var table="<table class='table'><thead><tr><th>CAUSA (A)</th><th>EFECTO (B1|A)</th><th>EFECTO (B2|A)</th></tr></thead><tbody><tr>";
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-          </tr>
-          <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>mary@example.com</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>july@example.com</td>
-          </tr>
-        </tbody>
-      </table>
+    function bayer(data){
+    var table="";
+   
     var lengData=data.length;
     var lengDataProbability=lengData/3;
     var MatrixData = new Array(lengDataProbability);
@@ -190,7 +175,22 @@
        resultN=c/bc;
        MatrixData[i][6]=resultN;
      }
-     console.log(MatrixData);
+     var table="<table class='table table-sm table-hover table-dark'><thead class='thead-dark'><tr><th>CAUSA (A<sub>n</sub>|B)</th><th>EFECTO (B1|A<sub>n</sub>)</th><th>RESULTADO</th></th></tr></thead><tbody>";
+     var tr="<tr>";
+     var trEnd="</tr>";
+     var htmlText="";    
+    
+      var tableResult=document.getElementById("tableResult");
+      htmlText+=table;
+      for(var i=0;i<lengMatrix;i++){
+        
+        var row="<th rowspan='2'>"+MatrixData[i][0]+"</th><td>"+MatrixData[i][1]+"</td><td>"+MatrixData[i][5]+"</td>";
+            row+="<tr><td>"+MatrixData[i][2]+"</td><td>"+MatrixData[i][6]+"</td></tr>";   
+            htmlText+=tr+row+trEnd+"</tbody>";
+      }
+      htmlText+=trEnd;
+      tableResult.innerHTML=htmlText;
+     //console.log(MatrixData);
   }
   function clearForm(fomr,type){
 
@@ -207,15 +207,19 @@
               elementsForm.value="";
               elementsForm.classList.add("is-invalid"); 
             }
-            
-          
-        
         }
-      
-      
     }
     
   }
+  function isNumberKey(evt)
+       {
+          var charCode = (evt.which) ? evt.which : evt.keyCode;
+          if (charCode != 46 && charCode > 31 
+            && (charCode < 48 || charCode > 57))
+             return false;
+
+          return true;
+       }
   </script>
   <style type="text/css">
     .componets{
@@ -233,6 +237,7 @@
 
       border-color: red;
     }
+   
   </style>
 </head>
 <body>
